@@ -1,0 +1,1169 @@
+/* Professional Code Editor Styles - VS Code Inspired */
+
+/* Main Editor Page */
+.editor-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+  font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+  color: #cccccc;
+}
+
+.editor-page.light {
+  background: #ffffff;
+  color: #333333;
+}
+
+.editor-page.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+}
+
+/* Professional Toolbar */
+.editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: 48px;
+  background: #252526;
+  border-bottom: 1px solid #3c3c3c;
+  flex-shrink: 0;
+}
+
+.editor-page.light .editor-toolbar {
+  background: #f3f3f3;
+  border-bottom: 1px solid #ddd;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 0.9rem;
+  padding: 0 0.75rem;
+  margin-right: 0.5rem;
+}
+
+.editor-page.light .toolbar-brand {
+  color: #333;
+}
+
+.brand-icon {
+  font-size: 1.2rem;
+}
+
+/* Language Selector */
+.language-selector {
+  padding: 0.4rem 0.75rem;
+  background: #3c3c3c;
+  color: #cccccc;
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.editor-page.light .language-selector {
+  background: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.language-selector:hover {
+  background: #505050;
+  border-color: #007acc;
+}
+
+.editor-page.light .language-selector:hover {
+  background: #f0f0f0;
+  border-color: #0078d4;
+}
+
+.language-selector:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 1px #007acc;
+}
+
+/* Toolbar Buttons */
+.toolbar-btn {
+  padding: 0.4rem 0.85rem;
+  background: transparent;
+  color: #cccccc;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: inherit;
+}
+
+.editor-page.light .toolbar-btn {
+  color: #333;
+}
+
+.toolbar-btn:hover {
+  background: #3c3c3c;
+  border-color: #007acc;
+}
+
+.editor-page.light .toolbar-btn:hover {
+  background: #e8e8e8;
+  border-color: #0078d4;
+}
+
+.toolbar-btn:active {
+  background: #2d2d2d;
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Run Button - Primary Action */
+.btn-run {
+  background: #0e639c;
+  color: #ffffff;
+  border-color: #0e639c;
+  font-weight: 600;
+}
+
+.btn-run:hover:not(:disabled) {
+  background: #1177bb;
+  border-color: #1177bb;
+}
+
+.editor-page.light .btn-run {
+  background: #0078d4;
+  border-color: #0078d4;
+}
+
+.editor-page.light .btn-run:hover:not(:disabled) {
+  background: #1084d8;
+}
+
+/* Stop Button - Danger */
+.btn-stop {
+  background: #d13438;
+  color: #ffffff;
+  border-color: #d13438;
+  font-weight: 600;
+}
+
+.btn-stop:hover {
+  background: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.auto-save-indicator {
+  color: #4ec9b0;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.5rem;
+}
+
+.editor-page.light .auto-save-indicator {
+  color: #008000;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: #454545;
+  margin: 0 0.25rem;
+}
+
+.editor-page.light .toolbar-divider {
+  background: #ddd;
+}
+
+.font-size-display {
+  color: #cccccc;
+  font-size: 0.8rem;
+  min-width: 45px;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+
+.editor-page.light .font-size-display {
+  color: #616161;
+}
+
+/* Editor Container */
+.editor-container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.split-horizontal,
+.split-vertical,
+.editor-console-split {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.split-horizontal {
+  flex-direction: row;
+}
+
+.split-vertical {
+  flex-direction: column;
+}
+
+.editor-console-split {
+  flex-direction: row;
+}
+
+/* Gutter (resize handle) */
+.gutter {
+  background: #1e1e1e;
+  cursor: col-resize;
+  transition: background 0.2s ease;
+  position: relative;
+}
+
+.gutter:hover {
+  background: #007acc;
+}
+
+.gutter.gutter-vertical {
+  cursor: row-resize;
+}
+
+.editor-page.light .gutter {
+  background: #e7e7e7;
+}
+
+.editor-page.light .gutter:hover {
+  background: #0078d4;
+}
+
+/* File Explorer - VS Code Style */
+.file-explorer {
+  background: #252526;
+  height: 100%;
+  overflow-y: auto;
+  border-right: 1px solid #3c3c3c;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-page.light .file-explorer {
+  background: #f3f3f3;
+  border-right: 1px solid #ddd;
+}
+
+.file-explorer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #3c3c3c;
+  background: #252526;
+}
+
+.editor-page.light .file-explorer-header {
+  background: #f3f3f3;
+  border-bottom: 1px solid #ddd;
+}
+
+.file-explorer-header h3 {
+  color: #cccccc;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.editor-page.light .file-explorer-header h3 {
+  color: #616161;
+}
+
+.btn-create-file {
+  background: transparent;
+  color: #cccccc;
+  border: none;
+  border-radius: 3px;
+  width: 28px;
+  height: 28px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-create-file:hover {
+  background: #3c3c3c;
+  color: #ffffff;
+}
+
+.editor-page.light .btn-create-file {
+  color: #616161;
+}
+
+.editor-page.light .btn-create-file:hover {
+  background: #e8e8e8;
+  color: #333;
+}
+
+.file-list {
+  padding: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  color: #cccccc;
+  border-left: 3px solid transparent;
+}
+
+.file-item:hover {
+  background: #2a2d2e;
+}
+
+.file-item.active {
+  background: #37373d;
+  color: #ffffff;
+  border-left-color: #007acc;
+}
+
+.editor-page.light .file-item {
+  color: #333;
+}
+
+.editor-page.light .file-item:hover {
+  background: #e8e8e8;
+}
+
+.editor-page.light .file-item.active {
+  background: #e4e4e4;
+  border-left-color: #0078d4;
+}
+
+.file-icon {
+  font-size: 1rem;
+  width: 18px;
+  text-align: center;
+}
+
+.file-name {
+  flex: 1;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.file-item:hover .file-actions {
+  opacity: 1;
+}
+
+.btn-file-action {
+  background: transparent;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.2rem 0.3rem;
+  color: #858585;
+  transition: color 0.2s ease;
+  border-radius: 3px;
+}
+
+.btn-file-action:hover {
+  color: #cccccc;
+  background: #3c3c3c;
+}
+
+.editor-page.light .btn-file-action {
+  color: #616161;
+}
+
+.editor-page.light .btn-file-action:hover {
+  color: #333;
+  background: #ddd;
+}
+
+/* Editor Content Area */
+.editor-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #1e1e1e;
+  flex: 1;
+}
+
+.editor-page.light .editor-content {
+  background: #ffffff;
+}
+
+/* Editor Tabs - VS Code Style */
+.editor-tabs {
+  display: flex;
+  background: #252526;
+  border-bottom: 1px solid #3c3c3c;
+  overflow-x: auto;
+  flex-shrink: 0;
+  height: 36px;
+}
+
+.editor-page.light .editor-tabs {
+  background: #f3f3f3;
+  border-bottom: 1px solid #ddd;
+}
+
+.editor-tabs::-webkit-scrollbar {
+  height: 3px;
+}
+
+.editor-tabs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor-tabs::-webkit-scrollbar-thumb {
+  background: #454545;
+  border-radius: 3px;
+}
+
+.editor-page.light .editor-tabs::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+.editor-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  background: transparent;
+  color: #969696;
+  border-right: 1px solid #3c3c3c;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  min-width: 120px;
+  max-width: 200px;
+  height: 36px;
+  position: relative;
+}
+
+.editor-page.light .editor-tab {
+  color: #616161;
+  border-right: 1px solid #ddd;
+}
+
+.editor-tab:hover {
+  background: #2d2d2d;
+  color: #ffffff;
+}
+
+.editor-page.light .editor-tab:hover {
+  background: #e8e8e8;
+  color: #333;
+}
+
+.editor-tab.active {
+  background: #1e1e1e;
+  color: #ffffff;
+  border-bottom: 2px solid #007acc;
+}
+
+.editor-page.light .editor-tab.active {
+  background: #ffffff;
+  color: #333;
+  border-bottom: 2px solid #0078d4;
+}
+
+.tab-name {
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tab-close {
+  background: transparent;
+  border: none;
+  color: #858585;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 0.2rem;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.editor-tab:hover .tab-close {
+  opacity: 1;
+}
+
+.editor-tab.active .tab-close {
+  opacity: 1;
+  color: #cccccc;
+}
+
+.tab-close:hover {
+  background: #3c3c3c;
+  color: #ffffff;
+}
+
+.editor-page.light .tab-close {
+}
+
+/* Editor Wrapper */
+.editor-wrapper {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Output Console - Professional Terminal Style */
+.output-console {
+  background: #1e1e1e;
+  border-left: 1px solid #3c3c3c;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.editor-page.light .output-console {
+  background: #f8f8f8;
+  border-left: 1px solid #ddd;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.console-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: #252526;
+  border-bottom: 1px solid #3c3c3c;
+  flex-shrink: 0;
+  height: 40px;
+}
+
+.editor-page.light .console-header {
+  background: #f3f3f3;
+  border-bottom: 1px solid #ddd;
+}
+
+.console-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.console-tab {
+  padding: 0.35rem 0.6rem;
+  background: transparent;
+  border: none;
+  color: #858585;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.console-tab:hover {
+  color: #cccccc;
+}
+
+.console-tab.active {
+  color: #ffffff;
+  border-bottom-color: #007acc;
+}
+
+.editor-page.light .console-tab {
+  color: #616161;
+}
+
+.editor-page.light .console-tab:hover {
+  color: #333;
+}
+
+.editor-page.light .console-tab.active {
+  color: #333;
+  border-bottom-color: #0078d4;
+}
+
+.console-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.execution-info {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  color: #858585;
+}
+
+.editor-page.light .execution-info {
+  color: #616161;
+}
+
+.exec-time,
+.exec-memory {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.console-action-btn {
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  color: #858585;
+  border: 1px solid #454545;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.console-action-btn:hover {
+  background: #3c3c3c;
+  color: #cccccc;
+  border-color: #007acc;
+}
+
+.editor-page.light .console-action-btn {
+  color: #616161;
+  border: 1px solid #ccc;
+}
+
+.editor-page.light .console-action-btn:hover {
+  background: #e8e8e8;
+  color: #333;
+}
+
+/* Console Body */
+.console-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 0.75rem 1rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  background: #1e1e1e;
+  min-height: 0;
+}
+
+/* Custom scrollbar for console */
+.console-body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.console-body::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.console-body::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 4px;
+}
+
+.console-body::-webkit-scrollbar-thumb:hover {
+  background: #4e4e4e;
+}
+
+.editor-page.light .console-body {
+  background: #f8f8f8;
+}
+
+.editor-page.light .console-body::-webkit-scrollbar-track {
+  background: #f8f8f8;
+}
+
+.editor-page.light .console-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+}
+
+.editor-page.light .console-body::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.console-output,
+.console-error {
+  margin-bottom: 0.75rem;
+}
+
+.output-label,
+.error-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4ec9b0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.error-label {
+  color: #f48771;
+}
+
+.editor-page.light .output-label {
+  color: #008000;
+}
+
+.editor-page.light .error-label {
+  color: #d13438;
+}
+
+.output-text,
+.error-text {
+  background: #252526;
+  padding: 0.75rem;
+  border-radius: 4px;
+  color: #cccccc;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  margin: 0;
+  border-left: 3px solid #4ec9b0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.error-text {
+  color: #f48771;
+  border-left-color: #f48771;
+}
+
+.editor-page.light .output-text,
+.editor-page.light .error-text {
+  background: #ffffff;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.editor-page.light .error-text {
+  color: #d13438;
+  border-left-color: #d13438;
+}
+
+.console-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #858585;
+  text-align: center;
+  padding: 1rem;
+}
+
+.console-empty p {
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+}
+
+.console-hint {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  color: #6b6b6b;
+}
+
+.editor-page.light .console-empty {
+  color: #858585;
+}
+
+/* Console Input Section */
+.console-input-section {
+  padding: 0.5rem 0.75rem;
+  background: #252526;
+  border-top: 1px solid #3c3c3c;
+  flex-shrink: 0;
+}
+
+.editor-page.light .console-input-section {
+  background: #f3f3f3;
+  border-top: 1px solid #ddd;
+}
+
+.input-label {
+  display: block;
+  color: #cccccc;
+  font-size: 0.7rem;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.editor-page.light .input-label {
+  color: #616161;
+}
+
+.console-input {
+  width: 100%;
+  padding: 0.5rem;
+  background: #1e1e1e;
+  color: #cccccc;
+  border: 1px solid #454545;
+  border-radius: 3px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.75rem;
+  resize: vertical;
+  min-height: 50px;
+  max-height: 120px;
+}
+
+.console-input:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 1px #007acc;
+}
+
+.editor-page.light .console-input {
+  background: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.editor-page.light .console-input:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+}
+
+/* Settings Panel - Modern Modal */
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.settings-panel {
+  background: #252526;
+  border: 1px solid #454545;
+  border-radius: 6px;
+  width: 90%;
+  max-width: 650px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.settings-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.settings-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.settings-body {
+  padding: 1.5rem;
+  max-height: calc(80vh - 80px);
+  overflow-y: auto;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.settings-section h3 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #3a3a52;
+}
+
+.setting-item {
+  margin-bottom: 1.5rem;
+}
+
+.setting-item label {
+  display: block;
+  color: #d4d4d8;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.theme-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.theme-btn {
+  flex: 1;
+  padding: 1rem;
+  background: #3a3a52;
+  color: #ffffff;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.theme-btn:hover {
+  background: #4a4a62;
+  transform: translateY(-2px);
+}
+
+.theme-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #3a3a52;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.setting-description {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  margin-left: 1.75rem;
+}
+
+.shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: #3a3a52;
+  border-radius: 8px;
+}
+
+.shortcut-keys {
+  background: #1a1a2e;
+  color: #667eea;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.shortcut-action {
+  color: #d4d4d8;
+  font-size: 0.9rem;
+}
+
+/* Light Theme Adjustments */
+.editor-page.light .editor-toolbar,
+.editor-page.light .file-explorer,
+.editor-page.light .editor-tabs,
+.editor-page.light .console-header {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.editor-page.light .file-item,
+.editor-page.light .toolbar-btn,
+.editor-page.light .language-selector {
+  background: #ffffff;
+  color: #1f2937;
+  border-color: #e5e7eb;
+}
+
+.editor-page.light .file-item:hover,
+.editor-page.light .toolbar-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .editor-toolbar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .toolbar-left,
+  .toolbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .toolbar-brand {
+    font-size: 1rem;
+  }
+
+  .settings-panel {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .shortcuts-list {
+    font-size: 0.85rem;
+  }
+
+  /* Stack editor and console vertically on mobile */
+  .editor-console-split {
+    flex-direction: column !important;
+  }
+
+  .output-console {
+    border-left: none;
+    border-top: 1px solid #3c3c3c;
+  }
+
+  .editor-page.light .output-console {
+    border-left: none;
+    border-top: 1px solid #ddd;
+  }
+}
