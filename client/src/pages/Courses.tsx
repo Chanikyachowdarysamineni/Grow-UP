@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 
 interface Course {
@@ -16,16 +16,8 @@ interface Course {
 }
 
 const Courses: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
 
   const categories = ['All', 'Frontend', 'Backend', 'Full Stack', 'Mobile', 'Data Science', 'DevOps'];
 

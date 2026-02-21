@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 interface Video {
@@ -24,7 +24,6 @@ interface Note {
 
 const VideoPlayer: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
-  const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
   
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
@@ -40,6 +39,7 @@ const VideoPlayer: React.FC = () => {
   const [quality, setQuality] = useState('1080p');
 
   // Sample video data
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   const sampleVideos: Video[] = [
     {
       id: '1',
@@ -77,7 +77,7 @@ Hooks allow you to use state and other React features without writing a class.`,
     if (savedTime && videoRef.current) {
       videoRef.current.currentTime = parseFloat(savedTime);
     }
-  }, [videoId]);
+  }, [videoId, sampleVideos]);
 
   useEffect(() => {
     const video = videoRef.current;

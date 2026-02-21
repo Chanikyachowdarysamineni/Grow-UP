@@ -88,7 +88,6 @@ const Flashcards: React.FC = () => {
   const [currentDeck, setCurrentDeck] = useState<Deck | null>(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [sessionStats, setSessionStats] = useState({ again: 0, hard: 0, good: 0, easy: 0 });
 
   const startStudying = (deck: Deck) => {
     if (deck.cards.length > 0) {
@@ -96,7 +95,6 @@ const Flashcards: React.FC = () => {
       setCurrentCardIndex(0);
       setIsFlipped(false);
       setStudyMode(true);
-      setSessionStats({ again: 0, hard: 0, good: 0, easy: 0 });
     }
   };
 

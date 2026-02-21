@@ -31,8 +31,6 @@ const CodePlayground: React.FC = () => {
   const [input, setInput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
-
-  const codeExamples: CodeExample[] = [
     {
       id: '1',
       title: 'Hello World - JavaScript',
@@ -70,8 +68,7 @@ print(doubled)`,
       description: 'Asynchronous JavaScript'
     }
   ];
-
-  const languages = [
+  */
     { value: 'javascript', label: 'JavaScript', icon: '📜' },
     { value: 'python', label: 'Python', icon: '🐍' },
     { value: 'java', label: 'Java', icon: '☕' },

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 interface Project {
@@ -100,6 +99,7 @@ const ProjectSubmissions: React.FC = () => {
     }
   ];
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setProjects(sampleProjects);
     

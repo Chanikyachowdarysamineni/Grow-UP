@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 interface Question {
@@ -34,7 +34,6 @@ interface QuizAttempt {
 
 const QuizAssessment: React.FC = () => {
   const { quizId } = useParams<{ quizId: string }>();
-  const navigate = useNavigate();
 
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -47,6 +46,7 @@ const QuizAssessment: React.FC = () => {
   const [codeOutput, setCodeOutput] = useState('');
 
   // Sample quiz data
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   const sampleQuizzes: Quiz[] = [
     {
       id: '1',
@@ -138,7 +138,7 @@ const QuizAssessment: React.FC = () => {
     if (savedAnswers) {
       setAnswers(JSON.parse(savedAnswers));
     }
-  }, [quizId]);
+  }, [quizId, sampleQuizzes]);
 
   // Timer
   useEffect(() => {
@@ -155,7 +155,7 @@ const QuizAssessment: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, showResults]);
+  }, [timeLeft, showResults, submitQuiz]);
 
   // Save answers
   useEffect(() => {
@@ -190,7 +190,7 @@ const QuizAssessment: React.FC = () => {
     }
   };
 
-  const submitQuiz = () => {
+  const submitQuiz = useCallback(() => {
     if (!quiz) return;
 
     let totalScore = 0;
@@ -223,7 +223,7 @@ const QuizAssessment: React.FC = () => {
 
     // Clear saved answers
     localStorage.removeItem(`quiz-answers-${quiz.id}`);
-  };
+  }, [quiz, answers]);
 
   const retakeQuiz = () => {
     setAnswers({});
@@ -234,12 +234,6 @@ const QuizAssessment: React.FC = () => {
     if (quiz) {
       setTimeLeft(quiz.duration * 60);
     }
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   if (!quiz) {

@@ -352,10 +352,10 @@ const LandingPage: React.FC = () => {
             <div>
               <h4 className="font-bold mb-4 font-poppins">Support</h4>
               <ul className="space-y-2 font-inter">
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                <li><button onClick={() => alert('Help Center - Coming Soon')} className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-none border-none p-0 text-left">Help Center</button></li>
+                <li><button onClick={() => alert('Contact Us - Coming Soon')} className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-none border-none p-0 text-left">Contact Us</button></li>
+                <li><button onClick={() => alert('Privacy Policy - Coming Soon')} className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-none border-none p-0 text-left">Privacy Policy</button></li>
+                <li><button onClick={() => alert('Terms of Service - Coming Soon')} className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-none border-none p-0 text-left">Terms of Service</button></li>
               </ul>
             </div>
           </div>
