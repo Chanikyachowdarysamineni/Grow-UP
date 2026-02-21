@@ -1,532 +1,200 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const { exec } = require('child_process');
-const fs = require('fs').promises;
-const path = require('path');
-const { promisify } = require('util');
+const dotenv = require('dotenv');
+const { connectDB } = require('./config/database');
+const { getEnv } = require('./config/env');
 
-const execPromise = promisify(exec);
+// Load environment variables
+dotenv.config();
 
+// Initialize express app
 const app = express();
-const PORT = process.env.PORT || 5000;
+
+// Connect to database
+connectDB();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
-
-// Create temp directory for code execution
-const TEMP_DIR = path.join(__dirname, 'temp');
-fs.mkdir(TEMP_DIR, { recursive: true }).catch(console.error);
-
-// Language configurations
-const languageConfigs = {
-  // Core Languages
-  python: {
-    extension: '.py',
-    command: (filename) => `python "${filename}"`,
-    timeout: 5000,
-    icon: '🐍',
-    displayName: 'Python',
-    category: 'core',
-  },
-  java: {
-    extension: '.java',
-    command: (filename) => {
-      const className = path.basename(filename, '.java');
-      const dir = path.dirname(filename);
-      return `cd "${dir}" && javac "${filename}" && java ${className}`;
-    },
-    timeout: 10000,
-    icon: '☕',
-    displayName: 'Java',
-    category: 'core',
-  },
-  c: {
-    extension: '.c',
-    command: (filename) => {
-      const outputFile = filename.replace('.c', '.exe');
-      return `gcc "${filename}" -o "${outputFile}" && "${outputFile}"`;
-    },
-    timeout: 10000,
-    icon: '⚙️',
-    displayName: 'C',
-    category: 'core',
-  },
-  cpp: {
-    extension: '.cpp',
-    command: (filename) => {
-      const outputFile = filename.replace('.cpp', '.exe');
-      return `g++ "${filename}" -o "${outputFile}" -std=c++17 && "${outputFile}"`;
-    },
-    timeout: 10000,
-    icon: '⚙️',
-    displayName: 'C++',
-    category: 'core',
-  },
-  go: {
-    extension: '.go',
-    command: (filename) => `go run "${filename}"`,
-    timeout: 10000,
-    icon: '🔷',
-    displayName: 'Go',
-    category: 'core',
-  },
-  rust: {
-    extension: '.rs',
-    command: (filename) => {
-      const outputFile = filename.replace('.rs', '.exe');
-      return `rustc "${filename}" -o "${outputFile}" && "${outputFile}"`;
-    },
-    timeout: 10000,
-    icon: '🦀',
-    displayName: 'Rust',
-    category: 'core',
-  },
-  csharp: {
-    extension: '.cs',
-    command: (filename) => `dotnet script "${filename}"`,
-    timeout: 10000,
-    icon: '#️⃣',
-    displayName: 'C#',
-    category: 'core',
-  },
-
-  // Web Languages
-  javascript: {
-    extension: '.js',
-    command: (filename) => `node "${filename}"`,
-    timeout: 5000,
-    icon: '📜',
-    displayName: 'JavaScript',
-    category: 'web',
-  },
-  typescript: {
-    extension: '.ts',
-    command: (filename) => `ts-node "${filename}"`,
-    timeout: 5000,
-    icon: '📘',
-    displayName: 'TypeScript',
-    category: 'web',
-  },
-  php: {
-    extension: '.php',
-    command: (filename) => `php "${filename}"`,
-    timeout: 5000,
-    icon: '🐘',
-    displayName: 'PHP',
-    category: 'web',
-  },
-
-  // Scripting Languages
-  ruby: {
-    extension: '.rb',
-    command: (filename) => `ruby "${filename}"`,
-    timeout: 5000,
-    icon: '💎',
-    displayName: 'Ruby',
-    category: 'scripting',
-  },
-  shell: {
-    extension: '.sh',
-    command: (filename) => `bash "${filename}"`,
-    timeout: 5000,
-    icon: '🐚',
-    displayName: 'Shell',
-    category: 'scripting',
-  },
-
-  // Mobile Languages
-  kotlin: {
-    extension: '.kt',
-    command: (filename) => `kotlinc -script "${filename}"`,
-    timeout: 10000,
-    icon: '🅺',
-    displayName: 'Kotlin',
-    category: 'mobile',
-  },
-  swift: {
-    extension: '.swift',
-    command: (filename) => `swift "${filename}"`,
-    timeout: 10000,
-    icon: '🦅',
-    displayName: 'Swift',
-    category: 'mobile',
-  },
-  dart: {
-    extension: '.dart',
-    command: (filename) => `dart run "${filename}"`,
-    timeout: 5000,
-    icon: '🎯',
-    displayName: 'Dart',
-    category: 'mobile',
-  },
-
-  // Data Languages
-  r: {
-    extension: '.r',
-    command: (filename) => `Rscript "${filename}"`,
-    timeout: 10000,
-    icon: '📊',
-    displayName: 'R',
-    category: 'data',
-  },
-
-  // Syntax-only (no execution)
-  html: {
-    extension: '.html',
-    command: null, // No execution
-    timeout: 0,
-    icon: '🌐',
-    displayName: 'HTML',
-    category: 'web',
-    syntaxOnly: true,
-  },
-  css: {
-    extension: '.css',
-    command: null, // No execution
-    timeout: 0,
-    icon: '🎨',
-    displayName: 'CSS',
-    category: 'web',
-    syntaxOnly: true,
-  },
-  json: {
-    extension: '.json',
-    command: null, // No execution
-    timeout: 0,
-    icon: '📋',
-    displayName: 'JSON',
-    category: 'web',
-    syntaxOnly: true,
-  },
-  markdown: {
-    extension: '.md',
-    command: null, // No execution
-    timeout: 0,
-    icon: '📝',
-    displayName: 'Markdown',
-    category: 'web',
-    syntaxOnly: true,
-  },
-  sql: {
-    extension: '.sql',
-    command: null, // No execution
-    timeout: 0,
-    icon: '🗄️',
-    displayName: 'SQL',
-    category: 'data',
-    syntaxOnly: true,
-  },
-};
-
-// Sanitize input to prevent code injection
-function sanitizeInput(input) {
-  // Remove potentially dangerous characters
-  return input.replace(/[;&|<>$`\\!]/g, '');
-}
-
-// Execute code with security measures
-async function executeCode(language, code, input = '') {
-  const config = languageConfigs[language];
-  
-  if (!config) {
-    const supportedLanguages = Object.keys(languageConfigs).join(', ');
-    throw new Error(`${config?.icon || '❌'} Unsupported language: ${language}\n\nSupported languages: ${supportedLanguages}`);
-  }
-
-  // Handle syntax-only languages (HTML, CSS, JSON, Markdown, SQL)
-  if (config.syntaxOnly) {
-    return {
-      output: `${config.icon} ${config.displayName} file created successfully!\n\nNote: ${config.displayName} is a markup/style language and cannot be executed directly.\nThe syntax has been validated and saved.`,
-      error: '',
-      executionTime: 0,
-    };
-  }
-
-  // Validate code
-  if (!code || code.trim().length === 0) {
-    throw new Error(`${config.icon} Code cannot be empty. Please write some ${config.displayName} code first.`);
-  }
-
-  // Generate unique filename
-  const timestamp = Date.now();
-  const randomId = Math.random().toString(36).substring(7);
-  const filename = `code_${timestamp}_${randomId}${config.extension}`;
-  const filepath = path.join(TEMP_DIR, filename);
-
-  try {
-    // Write code to file
-    await fs.writeFile(filepath, code, 'utf-8');
-
-    // Prepare command
-    let command = config.command(filepath);
-    
-    // If input is provided, echo it to the program
-    if (input) {
-      command = `echo "${sanitizeInput(input)}" | ${command}`;
-    }
-
-    // Execute with timeout and resource limits
-    const startTime = Date.now();
-    const startMemory = process.memoryUsage().heapUsed;
-    
-    const { stdout, stderr } = await execPromise(command, {
-      timeout: config.timeout,
-      maxBuffer: 1024 * 1024, // 1MB output limit
-      cwd: TEMP_DIR,
-      env: { ...process.env, PYTHONUNBUFFERED: '1' },
-    });
-    
-    const executionTime = Date.now() - startTime;
-    const endMemory = process.memoryUsage().heapUsed;
-    const memoryUsage = Math.max(0, Math.round((endMemory - startMemory) / 1024)); // KB
-
-    // Clean up
-    await cleanupFile(filepath);
-
-    // Format output messages
-    let output = stdout;
-    let error = stderr;
-
-    // Add helpful messages
-    if (!output && !error) {
-      output = '✅ Program executed successfully with no output.';
-    }
-
-    return {
-      output,
-      error,
-      executionTime,
-      memoryUsage,
-    };
-  } catch (error) {
-    // Clean up
-    await cleanupFile(filepath);
-
-    // Handle different types of errors
-    if (error.killed) {
-      return {
-        output: '',
-        error: `${config.icon} Execution Timeout!\n\nYour ${config.displayName} program took longer than ${config.timeout / 1000} seconds.\n\nPossible causes:\n• Infinite loop in your code\n• Program waiting for input (use stdin section)\n• Very heavy computation\n\nTip: Check your loops, recursive functions, and input handling.`,
-        executionTime: config.timeout,
-      };
-    }
-
-    if (error.code === 'ENOENT') {
-      const installInstructions = {
-        python: 'Download from https://www.python.org/ and add to PATH',
-        java: 'Download JDK from https://www.oracle.com/java/technologies/downloads/',
-        c: 'Install MinGW (https://mingw-w64.org/) or GCC',
-        cpp: 'Install MinGW (https://mingw-w64.org/) or G++',
-        go: 'Download from https://go.dev/dl/',
-      };
-      
-      return {
-        output: '',
-        error: `${config.icon} ${config.displayName} Not Found!\n\n${config.displayName} is not installed or not in system PATH.\n\nInstallation: ${installInstructions[language]}\n\nAfter installation, restart the server and try again.`,
-        executionTime: 0,
-      };
-    }
-
-    // Compilation or runtime errors
-    const errorOutput = error.stderr || error.message || 'Unknown execution error';
-    
-    // Format error message based on language
-    let formattedError = `${config.icon} ${config.displayName} Error:\n\n${errorOutput}`;
-
-    return {
-      output: error.stdout || '',
-      error: formattedError,
-      executionTime: 0,
-    };
-  }
-}
-
-// Cleanup temporary files
-async function cleanupFile(filepath) {
-  try {
-    await fs.unlink(filepath);
-    
-    // Also cleanup compiled files for C, C++, Java
-    const ext = path.extname(filepath);
-    if (ext === '.c' || ext === '.cpp') {
-      const exeFile = filepath.replace(ext, '.exe');
-      await fs.unlink(exeFile).catch(() => {});
-    } else if (ext === '.java') {
-      const classFile = filepath.replace('.java', '.class');
-      await fs.unlink(classFile).catch(() => {});
-    }
-  } catch (error) {
-    // Ignore cleanup errors
-  }
-}
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // API Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/progress', require('./routes/progressRoutes'));
+app.use('/api/notes', require('./routes/noteRoutes'));
+app.use('/api/courses', require('./routes/courseRoutes'));
+app.use('/api/bookmarks', require('./routes/bookmarkRoutes'));
+app.use('/api/forum', require('./routes/forumRoutes'));
+app.use('/api/conversations', require('./routes/conversationRoutes'));
+app.use('/api/flashcards', require('./routes/flashcardRoutes'));
+app.use('/api/quizzes', require('./routes/quizRoutes'));
+app.use('/api/projects', require('./routes/projectRoutes'));
+app.use('/api/ai-tutor', require('./routes/aiTutorRoutes'));
 
-// Health check
+// Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
-});
-
-// Language availability check
-app.get('/api/languages', async (req, res) => {
-  const languageStatus = {};
-  
-  const checkCommands = {
-    python: 'python --version',
-    java: 'java -version',
-    c: 'gcc --version',
-    cpp: 'g++ --version',
-    go: 'go version',
-  };
-  
-  for (const [lang, command] of Object.entries(checkCommands)) {
-    try {
-      await execPromise(command, { timeout: 3000 });
-      languageStatus[lang] = {
-        available: true,
-        ...languageConfigs[lang],
-      };
-    } catch (error) {
-      languageStatus[lang] = {
-        available: false,
-        ...languageConfigs[lang],
-        error: 'Not installed or not in PATH',
-      };
-    }
-  }
-  
-  const availableCount = Object.values(languageStatus).filter(l => l.available).length;
-  
-  res.json({
-    totalLanguages: Object.keys(languageStatus).length,
-    availableLanguages: availableCount,
-    languages: languageStatus,
-    message: `${availableCount}/5 languages available`,
+  res.status(200).json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date()
   });
 });
 
-// Execute code endpoint
-app.post('/api/execute', async (req, res) => {
-  try {
-    const { language, code, input } = req.body;
-
-    // Validate request
-    if (!language) {
-      return res.status(400).json({
-        output: '',
-        error: '⚠️ Missing language field. Please select a programming language.',
-        executionTime: 0,
-      });
-    }
-
-    if (!code) {
-      return res.status(400).json({
-        output: '',
-        error: '⚠️ Missing code field. Please write some code to execute.',
-        executionTime: 0,
-      });
-    }
-
-    // Validate code length
-    if (code.length > 100000) {
-      return res.status(400).json({
-        output: '',
-        error: '⚠️ Code is too long!\n\nMaximum allowed: 100,000 characters\nYour code: ' + code.length.toLocaleString() + ' characters\n\nPlease reduce the code size.',
-        executionTime: 0,
-      });
-    }
-
-    // Check for potentially dangerous patterns (basic security)
-    const dangerousPatterns = [
-      /rm\s+-rf/i,
-      /format\s+c:/i,
-      /del\s+\/f\s+\/q/i,
-      /__import__\s*\(\s*['"]os['"]\s*\)/,
-    ];
-
-    for (const pattern of dangerousPatterns) {
-      if (pattern.test(code)) {
-        return res.status(400).json({
-          output: '',
-          error: '🔒 Security Warning!\n\nYour code contains potentially dangerous operations that are not allowed.\nPlease remove system-level commands and try again.',
-          executionTime: 0,
-        });
-      }
-    }
-
-    // Execute code
-    const result = await executeCode(language, code, input || '');
-
-    // Add success indicator if no errors
-    if (!result.error && result.output) {
-      result.output = `📤 Output:\n\n${result.output}`;
-    }
-
-    res.json(result);
-  } catch (error) {
-    console.error('Execution error:', error);
-    res.status(500).json({
-      output: '',
-      error: `❌ Server Error:\n\n${error.message || 'Internal server error'}\n\nPlease check if the backend server is running properly.`,
-      executionTime: 0,
-    });
-  }
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found'
+  });
 });
 
-// Periodic cleanup of temp directory (every hour)
-setInterval(async () => {
-  try {
-    const files = await fs.readdir(TEMP_DIR);
-    const now = Date.now();
-    
-    for (const file of files) {
-      const filepath = path.join(TEMP_DIR, file);
-      const stats = await fs.stat(filepath);
-      
-      // Delete files older than 1 hour
-      if (now - stats.mtimeMs > 3600000) {
-        await fs.unlink(filepath).catch(() => {});
-      }
-    }
-  } catch (error) {
-    console.error('Cleanup error:', error);
-  }
-}, 3600000);
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err : {}
+  });
+});
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`\n${'='.repeat(60)}`);
-  console.log(`🚀 Grow Up Code Editor Server`);
-  console.log(`${'='.repeat(60)}`);
-  console.log(`📡 Server running on: http://localhost:${PORT}`);
-  console.log(`📁 Temp directory: ${TEMP_DIR}`);
-  console.log(`\n✅ Supported Languages:`);
-  
-  Object.entries(languageConfigs).forEach(([lang, config]) => {
-    console.log(`   ${config.icon} ${config.displayName.padEnd(8)} - Timeout: ${config.timeout}ms`);
+const PORT = getEnv('PORT') || 5000;
+const server = app.listen(PORT, () => {
+  console.log(`
+    ╔════════════════════════════════════════════════════════════╗
+    ║                  🚀 SERVER RUNNING 🚀                      ║
+    ║━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━║
+    ║  Server: http://localhost:${PORT}                          ║
+    ║  Environment: ${process.env.NODE_ENV || 'development'}                      ║
+    ║  Database: Connected to MongoDB                             ║
+    ║════════════════════════════════════════════════════════════╝
+  `);
+});
+
+// Socket.io setup for real-time features
+const http = require('http');
+const socketIO = require('socket.io');
+
+const io = socketIO(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
+
+// Socket.io event handlers
+const onlineUsers = new Map();
+
+io.on('connection', (socket) => {
+  console.log(`[Socket.io] User connected: ${socket.id}`);
+
+  // User comes online
+  socket.on('user-online', (userId) => {
+    onlineUsers.set(userId, socket.id);
+    io.emit('user-status', {
+      userId,
+      status: 'online',
+      onlineCount: onlineUsers.size
+    });
+    console.log(`[Socket.io] User online: ${userId}`);
   });
-  
-  console.log(`\n🔒 Security Features:`);
-  console.log(`   • Execution timeouts enabled`);
-  console.log(`   • Resource limits (1MB output)`);
-  console.log(`   • Dangerous pattern detection`);
-  console.log(`   • Automatic temp file cleanup`);
-  console.log(`\n${'-'.repeat(60)}`);
-  console.log(`💡 Tip: Make sure required compilers/interpreters are installed`);
-  console.log(`📖 See LANGUAGES.md for setup instructions`);
-  console.log(`${'='.repeat(60)}\n`);
+
+  // Send private message
+  socket.on('send-message', (data) => {
+    const { conversationId, recipientId, message } = data;
+    io.emit('message-received', {
+      conversationId,
+      recipientId,
+      message,
+      timestamp: new Date()
+    });
+    console.log(`[Socket.io] Message sent in conversation: ${conversationId}`);
+  });
+
+  // Forum notification
+  socket.on('thread-reply', (data) => {
+    const { threadId, threadTitle } = data;
+    io.emit('forum-notification', {
+      type: 'new-reply',
+      threadId,
+      threadTitle,
+      message: `New reply on "${threadTitle}"`
+    });
+    console.log(`[Socket.io] New reply on thread: ${threadId}`);
+  });
+
+  // Typing indicator
+  socket.on('typing', (data) => {
+    const { conversationId, userId, isTyping } = data;
+    io.emit('user-typing', {
+      conversationId,
+      userId,
+      isTyping
+    });
+  });
+
+  // Course progress update
+  socket.on('progress-update', (data) => {
+    const { userId, courseId, completionPercentage } = data;
+    io.emit('progress-changed', {
+      userId,
+      courseId,
+      completionPercentage,
+      timestamp: new Date()
+    });
+    console.log(`[Socket.io] Progress updated: ${userId} - ${courseId}`);
+  });
+
+  // Quiz submission
+  socket.on('quiz-submitted', (data) => {
+    const { userId, quizId, score, passed } = data;
+    io.emit('quiz-completed', {
+      userId,
+      quizId,
+      score,
+      passed,
+      timestamp: new Date()
+    });
+    console.log(`[Socket.io] Quiz submitted: ${quizId} by ${userId}`);
+  });
+
+  // User goes offline
+  socket.on('disconnect', () => {
+    let disconnectedUserId = null;
+    for (const [userId, socketId] of onlineUsers.entries()) {
+      if (socketId === socket.id) {
+        disconnectedUserId = userId;
+        onlineUsers.delete(userId);
+        break;
+      }
+    }
+
+    if (disconnectedUserId) {
+      io.emit('user-status', {
+        userId: disconnectedUserId,
+        status: 'offline',
+        onlineCount: onlineUsers.size
+      });
+      console.log(`[Socket.io] User offline: ${disconnectedUserId}`);
+    }
+  });
+
+  // Error handling
+  socket.on('error', (error) => {
+    console.error(`[Socket.io] Error: ${error}`);
+  });
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  process.exit(0);
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
 });
 
-process.on('SIGINT', () => {
-  console.log('SIGINT signal received: closing HTTP server');
-  process.exit(0);
-});
+module.exports = app;

@@ -1,0 +1,417 @@
+/**
+ * CodeEditor Styles
+ * =================
+ * Consolidated styling for the modular code editor
+ * 
+ * Features:
+ * - CSS custom properties (variables)
+ * - Dark theme optimized
+ * - Syntax highlighting colors
+ * - Responsive design
+ * - Accessibility support
+ */
+
+/* ========================================
+   CSS Custom Properties (Variables)
+   ======================================== */
+:root {
+  /* Editor Colors */
+  --editor-bg: #1e1e1e;
+  --editor-text: #d4d4d4;
+  --editor-line-number: #858585;
+  --editor-line-number-active: #ffffff;
+  --editor-line-number-bg-active: rgba(255, 255, 255, 0.1);
+  --editor-border: #333333;
+  --editor-caret: #ffffff;
+  --editor-selection: rgba(38, 79, 120, 0.6);
+
+  /* Syntax Highlighting Colors */
+  --syntax-comment: #6a9955;
+  --syntax-string: #ce9178;
+  --syntax-number: #b5cea8;
+  --syntax-keyword: #569cd6;
+  --syntax-function: #dcdcaa;
+  --syntax-class: #4ec9b0;
+  --syntax-operator: #d4d4d4;
+  --syntax-builtin: #4fc1ff;
+  --syntax-regex: #d16969;
+  --syntax-error: #f44747;
+
+  /* Editor Dimensions */
+  --line-height: 20px;
+  --line-number-width: 50px;
+  --editor-font-size: 14px;
+  --editor-font-family: Consolas, Monaco, "Courier New", monospace;
+
+  /* Spacing */
+  --editor-padding: 10px;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.3s ease;
+}
+
+/* ========================================
+   Editor Layout
+   ======================================== */
+.code-editor-layout {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: var(--editor-bg);
+  overflow: hidden;
+  font-family: var(--editor-font-family);
+  font-size: var(--editor-font-size);
+  color: var(--editor-text);
+}
+
+/* ========================================
+   Line Numbers
+   ======================================== */
+.line-numbers-container {
+  position: relative;
+  width: var(--line-number-width);
+  background-color: var(--editor-bg);
+  border-right: 1px solid var(--editor-border);
+  font-size: 13px;
+  overflow: hidden;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.line-number {
+  display: block;
+  height: var(--line-height);
+  line-height: var(--line-height);
+  text-align: right;
+  padding-right: 10px;
+  color: var(--editor-line-number);
+  transition: all var(--transition-fast);
+}
+
+.line-number.active {
+  color: var(--editor-line-number-active);
+  background-color: var(--editor-line-number-bg-active);
+  font-weight: 600;
+}
+
+.line-number:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   Syntax Highlighting Layer
+   ======================================== */
+.syntax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: var(--editor-padding);
+  overflow: hidden;
+  pointer-events: none;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: var(--line-height);
+  font-size: var(--editor-font-size);
+  font-family: var(--editor-font-family);
+  color: var(--editor-text);
+  z-index: 1;
+}
+
+/* Syntax token styles */
+.token-comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.token-string {
+  color: var(--syntax-string);
+}
+
+.token-number {
+  color: var(--syntax-number);
+}
+
+.token-keyword {
+  color: var(--syntax-keyword);
+  font-weight: 600;
+}
+
+.token-function {
+  color: var(--syntax-function);
+}
+
+.token-class {
+  color: var(--syntax-class);
+}
+
+.token-operator {
+  color: var(--syntax-operator);
+}
+
+.token-builtin {
+  color: var(--syntax-builtin);
+}
+
+.token-regex {
+  color: var(--syntax-regex);
+}
+
+.token-punctuation {
+  color: var(--editor-text);
+}
+
+/* ========================================
+   Textarea Layer
+   ======================================== */
+.code-textarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: var(--editor-padding);
+  border: none;
+  outline: none;
+  resize: none;
+  background-color: transparent;
+  color: transparent;
+  caret-color: var(--editor-caret);
+  font-family: var(--editor-font-family);
+  font-size: var(--editor-font-size);
+  line-height: var(--line-height);
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  overflow-y: auto;
+  tab-size: 2;
+  z-index: 2;
+}
+
+.code-textarea::selection {
+  background-color: var(--editor-selection);
+}
+
+.code-textarea::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+.code-textarea::-webkit-scrollbar-track {
+  background-color: var(--editor-bg);
+}
+
+.code-textarea::-webkit-scrollbar-thumb {
+  background-color: rgba(121, 121, 121, 0.4);
+  border-radius: 10px;
+}
+
+.code-textarea::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(121, 121, 121, 0.6);
+}
+
+.code-textarea::-webkit-scrollbar-corner {
+  background-color: var(--editor-bg);
+}
+
+/* ========================================
+   Error Highlighting
+   ======================================== */
+.error-line {
+  background-color: rgba(244, 71, 71, 0.1);
+  border-left: 2px solid var(--syntax-error);
+}
+
+.error-underline {
+  text-decoration: wavy underline var(--syntax-error);
+  text-decoration-skip-ink: none;
+}
+
+/* ========================================
+   Toolbar / Controls
+   ======================================== */
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #252526;
+  border-bottom: 1px solid var(--editor-border);
+}
+
+.editor-button {
+  padding: 6px 12px;
+  background-color: #3c3c3c;
+  color: var(--editor-text);
+  border: 1px solid var(--editor-border);
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.editor-button:hover:not(:disabled) {
+  background-color: #454545;
+}
+
+.editor-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editor-button.active {
+  background-color: #0e639c;
+  border-color: #007acc;
+}
+
+/* ========================================
+   File Tabs
+   ======================================== */
+.file-tabs {
+  display: flex;
+  gap: 2px;
+  background-color: #252526;
+  border-bottom: 1px solid var(--editor-border);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.file-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #2d2d2d;
+  color: rgba(255, 255, 255, 0.6);
+  border: none;
+  border-right: 1px solid var(--editor-border);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  font-size: 13px;
+}
+
+.file-tab:hover {
+  background-color: #3c3c3c;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.file-tab.active {
+  background-color: var(--editor-bg);
+  color: #ffffff;
+  border-bottom: 2px solid #007acc;
+}
+
+.file-tab .close-button {
+  padding: 2px 4px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.file-tab .close-button:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.file-tab.unsaved::after {
+  content: '●';
+  color: #007acc;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ========================================
+   Accessibility
+   ======================================== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --editor-border: #ffffff;
+    --editor-line-number: #ffffff;
+    --editor-selection: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .line-number,
+  .editor-button,
+  .file-tab {
+    transition: none;
+  }
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
+  :root {
+    --editor-font-size: 13px;
+    --line-number-width: 40px;
+  }
+
+  .editor-toolbar {
+    flex-wrap: wrap;
+    padding: 6px 8px;
+  }
+
+  .editor-button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --editor-font-size: 12px;
+    --line-number-width: 35px;
+  }
+
+  .file-tab {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+@media print {
+  .code-editor-layout {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  .line-numbers-container {
+    background-color: #f5f5f5;
+  }
+
+  .code-textarea {
+    display: none;
+  }
+
+  .syntax-layer {
+    color: #000000;
+  }
+}
