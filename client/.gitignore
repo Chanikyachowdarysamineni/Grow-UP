@@ -1,23 +1,67 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.js
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
 
-# testing
+# Testing
 /coverage
+.jest-cache
+jest.json
 
-# production
+# Production
 /build
+/dist
+out/
 
-# misc
+# IDE & Editor
+.vscode/
+.vscode-settings.json
+.idea/
+*.sublime-workspace
+*.sublime-project
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+jsconfig.json.user
+
+# Misc
 .DS_Store
+Thumbs.db
+desktop.ini
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+# Logs
 npm-debug.log*
+npm-error.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Temporary
+.cache/
+tmp/
+temp/
+*.tmp
+
+# OS
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# React
+.eslintcache
+.parcelrc
+
+# Environment
+.env.*.private
+.secrets

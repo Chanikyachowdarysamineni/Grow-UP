@@ -2,14 +2,7 @@
 node_modules/
 package-lock.json
 yarn.lock
-
-# Environment Variables
-.env
-.env.local
-.env.*.local
-.env.development.local
-.env.test.local
-.env.production.local
+pnpm-lock.yaml
 
 # Build & Distribution
 dist/
@@ -43,44 +36,59 @@ jest.json
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
 
-# OS
+# OS Files
 .DS_Store
-Thumbs.db
-desktop.ini
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+desktop.ini
+Thumbs.db
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.private
+.secrets
 
 # Database
 *.sqlite
 *.sqlite3
 *.db
 
-# Temporary
+# Temporary Files
 tmp/
 temp/
 *.tmp
 .cache/
+.runtime/
+
+# Dependency lock files
+pnpm-lock.yaml
+yarn.lock.backup
 
 # Runtime
-.runtime/
 pid/
 *.pid
 
 # Secrets
 .secrets
-.env.*.private
 private-key*
 
-# Dependency lock files
-pnpm-lock.yaml
-yarn.lock.backup
+# IDE
+.history/
+.ionide/
+.vscode-settings.json
 
 # macOS
 .AppleDouble
