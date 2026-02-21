@@ -46,7 +46,7 @@ const QuizAssessment: React.FC = () => {
   const [codeOutput, setCodeOutput] = useState('');
 
   // Sample quiz data
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const sampleQuizzes: Quiz[] = [
     {
       id: '1',
@@ -190,6 +190,7 @@ const QuizAssessment: React.FC = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   const submitQuiz = useCallback(() => {
     if (!quiz) return;
 

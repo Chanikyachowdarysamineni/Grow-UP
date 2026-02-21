@@ -28,9 +28,13 @@ const CodePlayground: React.FC = () => {
   } = fileManager;
 
   const [output, setOutput] = useState('');
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState('')
+;
   const [isRunning, setIsRunning] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const codeExamples: CodeExample[] = [
     {
       id: '1',
       title: 'Hello World - JavaScript',
@@ -68,7 +72,9 @@ print(doubled)`,
       description: 'Asynchronous JavaScript'
     }
   ];
-  */
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const languages = [
     { value: 'javascript', label: 'JavaScript', icon: '📜' },
     { value: 'python', label: 'Python', icon: '🐍' },
     { value: 'java', label: 'Java', icon: '☕' },

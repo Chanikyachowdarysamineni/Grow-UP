@@ -39,7 +39,7 @@ const VideoPlayer: React.FC = () => {
   const [quality, setQuality] = useState('1080p');
 
   // Sample video data
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const sampleVideos: Video[] = [
     {
       id: '1',

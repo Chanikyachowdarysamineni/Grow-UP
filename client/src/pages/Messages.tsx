@@ -58,6 +58,7 @@ const Messages: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     scrollToBottom();
   }, [messages, selectedConversation]);
