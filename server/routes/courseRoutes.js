@@ -7,16 +7,16 @@ const {
   enrollCourse,
   rateCourse
 } = require('../controllers/courseController');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Course routes
 router.get('/', getAllCourses);
 router.get('/:courseId', getCourse);
-router.post('/', authMiddleware, createCourse);
-router.post('/:courseId/lesson', authMiddleware, addLesson);
-router.post('/:courseId/enroll', authMiddleware, enrollCourse);
-router.post('/:courseId/rate', authMiddleware, rateCourse);
+router.post('/', auth, createCourse);
+router.post('/:courseId/lesson', auth, addLesson);
+router.post('/:courseId/enroll', auth, enrollCourse);
+router.post('/:courseId/rate', auth, rateCourse);
 
 module.exports = router;

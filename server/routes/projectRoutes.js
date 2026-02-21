@@ -6,7 +6,7 @@ const {
   submitProject,
   reviewProject
 } = require('../controllers/projectController');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/', getAllProjects);
 router.get('/user/:userId', getUserProjects);
 router.get('/:projectId', getProject);
-router.post('/:userId/submit', authMiddleware, submitProject);
-router.put('/:projectId/review', authMiddleware, reviewProject);
+router.post('/:userId/submit', auth, submitProject);
+router.put('/:projectId/review', auth, reviewProject);
 
 module.exports = router;

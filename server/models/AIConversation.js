@@ -41,4 +41,4 @@ const aiConversationSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('AIConversation', aiConversationSchema);
+module.exports = mongoose.models.AIConversation || mongoose.model('AIConversation', aiConversationSchema);

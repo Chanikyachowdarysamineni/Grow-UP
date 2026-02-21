@@ -6,15 +6,15 @@ const {
   sendMessage,
   markAsRead
 } = require('../controllers/conversationController');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Message routes
-router.get('/', authMiddleware, getUserConversations);
-router.get('/:conversationId', authMiddleware, getConversation);
-router.post('/start', authMiddleware, startConversation);
-router.post('/:conversationId/message', authMiddleware, sendMessage);
-router.put('/:conversationId/message/:messageId/read', authMiddleware, markAsRead);
+router.get('/', auth, getUserConversations);
+router.get('/:conversationId', auth, getConversation);
+router.post('/start', auth, startConversation);
+router.post('/:conversationId/message', auth, sendMessage);
+router.put('/:conversationId/message/:messageId/read', auth, markAsRead);
 
 module.exports = router;

@@ -48,4 +48,4 @@ const conversationSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Conversation', conversationSchema);
+module.exports = mongoose.models.Conversation || mongoose.model('Conversation', conversationSchema);

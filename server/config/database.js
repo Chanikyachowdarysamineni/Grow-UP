@@ -7,14 +7,19 @@ const connectDB = async () => {
     
     await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000
     });
 
     console.log('✅ MongoDB connected successfully');
     return mongoose.connection;
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
-    process.exit(1);
+    console.warn('⚠️ MongoDB connection warning:', error.message);
+    console.warn('ℹ️ Server will run but database operations may fail');
+    console.warn('📝 To use database features, start MongoDB: mongod');
+    // Don't exit - allow server to run anyway
+    return null;
   }
 };
 

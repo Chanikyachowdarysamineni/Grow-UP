@@ -1,5 +1,4 @@
-const Flashcard = require('../models/Flashcard');
-const Deck = require('../models/Deck');
+const { Flashcard, Deck } = require('../models/Flashcard');
 
 // Get user decks
 exports.getUserDecks = async (req, res) => {

@@ -62,4 +62,4 @@ const deckSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Deck', deckSchema);
+module.exports = mongoose.models.Deck || mongoose.model('Deck', deckSchema);

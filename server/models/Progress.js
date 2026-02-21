@@ -59,4 +59,4 @@ const progressSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Progress', progressSchema);
+module.exports = mongoose.models.Progress || mongoose.model('Progress', progressSchema);

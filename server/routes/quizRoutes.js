@@ -6,15 +6,15 @@ const {
   submitQuizAttempt,
   getUserQuizAttempts
 } = require('../controllers/quizController');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Quiz routes
 router.get('/', getAllQuizzes);
 router.get('/:quizId', getQuiz);
-router.post('/', authMiddleware, createQuiz);
-router.post('/:quizId/submit', authMiddleware, submitQuizAttempt);
-router.get('/:quizId/attempts', authMiddleware, getUserQuizAttempts);
+router.post('/', auth, createQuiz);
+router.post('/:quizId/submit', auth, submitQuizAttempt);
+router.get('/:quizId/attempts', auth, getUserQuizAttempts);
 
 module.exports = router;

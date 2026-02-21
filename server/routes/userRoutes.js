@@ -4,15 +4,15 @@ const {
   updateUserProfile,
   awardBadge
 } = require('../controllers/userController');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // User profile routes
 router.get('/:userId', getUserProfile);
-router.put('/:userId', authMiddleware, updateUserProfile);
+router.put('/:userId', auth, updateUserProfile);
 
 // Badge routes
-router.post('/:userId/badge', authMiddleware, awardBadge);
+router.post('/:userId/badge', auth, awardBadge);
 
 module.exports = router;

@@ -6,15 +6,15 @@ const {
   sendMessage,
   getLearningsuggestions
 } = require('../controllers/aiTutorController');
-const authMiddleware = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // AI Tutor routes
-router.get('/:userId/conversations', authMiddleware, getAIConversations);
-router.get('/:conversationId', authMiddleware, getConversation);
-router.post('/:userId/start', authMiddleware, startConversation);
-router.post('/:conversationId/message', authMiddleware, sendMessage);
-router.get('/:userId/suggestions', authMiddleware, getLearningsuggestions);
+router.get('/:userId/conversations', auth, getAIConversations);
+router.get('/:conversationId', auth, getConversation);
+router.post('/:userId/start', auth, startConversation);
+router.post('/:conversationId/message', auth, sendMessage);
+router.get('/:userId/suggestions', auth, getLearningsuggestions);
 
 module.exports = router;

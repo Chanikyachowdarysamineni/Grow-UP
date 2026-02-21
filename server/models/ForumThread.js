@@ -75,4 +75,4 @@ const forumThreadSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('ForumThread', forumThreadSchema);
+module.exports = mongoose.models.ForumThread || mongoose.model('ForumThread', forumThreadSchema);
